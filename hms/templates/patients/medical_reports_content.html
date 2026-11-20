@@ -1,0 +1,41 @@
+<div class="patient-card">
+    <h2><i class="fas fa-file-medical"></i> Your Medical Reports</h2>
+    {% if reports %}
+    <div class="table-patient" style="overflow-x: auto;">
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Condition</th>
+                    <th>Details</th>
+                    <th>Doctor</th>
+                    <th>Diagnosis Date</th>
+                    <th>Status</th>
+                    <th>Document</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td><strong>{{ report.condition }}</strong></td>
+                    <td>{{ report.description|default:"—" }}</td>
+                    <td>{{ report.doctor.get_full_name }}</td>
+                    <td>{{ report.diagnosis_date|date:"M d, Y" }}</td>
+                    <td>{{ report.get_status_display }}</td>
+                    <td>
+                        {% if report.file_upload or report.dfs_file_id %}
+                        <a href="{% url 'download_medical_report' report.id %}" class="btn-patient btn-primary-patient">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        {% else %}
+                        <span style="color: #546E7A;">No file attached</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color: #546E7A;">No medical reports have been uploaded for you yet.</p>
+    {% endif %}
+</div>
